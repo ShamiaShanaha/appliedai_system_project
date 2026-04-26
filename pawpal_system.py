@@ -1,7 +1,15 @@
+import logging
+import re
 from dataclasses import dataclass, field
 from datetime import date, timedelta  # new code
 from enum import Enum
 from typing import List, Optional
+
+logging.basicConfig(
+    filename="pawpal.log",
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s",
+)
 
 
 # new edit
@@ -326,3 +334,159 @@ class Scheduler:
             lines.append(f"  ! {warning}")
 
         return "\n".join(lines)
+
+
+class ScheduleAgent:
+    """Agentic workflow: plan → act → check to resolve scheduling conflicts."""
+
+    SLOT_ORDER = [TimeSlot.MORNING, TimeSlot.AFTERNOON, TimeSlot.EVENING, TimeSlot.ANY]
+
+    def __init__(self, owner: "Owner"):
+        self.owner = owner
+        self.log: List[str] = []  # human-readable step log shown in the UI
+
+    def _log(self, msg: str) -> None:
+        self.log.append(msg)
+        logging.info(msg)
+
+    # ── Phase 1: Plan ────────────────────────────────────────────────────────
+    def plan(self) -> List[str]:
+        """Identify current conflicts and return them."""
+        self._log("AGENT PLAN: analysing current schedule for conflicts.")
+        scheduler = Scheduler(owner=self.owner)
+        conflicts = scheduler.safe_detect_conflicts()
+        has_conflicts = any("No conflicts" not in c for c in conflicts)
+        if not has_conflicts:
+            self._log("AGENT PLAN: no conflicts found — nothing to fix.")
+        else:
+            for c in conflicts:
+                if "No conflicts" not in c:
+                    self._log(f"AGENT PLAN: detected — {c}")
+        return conflicts
+
+    # ── Phase 2: Act ─────────────────────────────────────────────────────────
+    def act(self, conflicts: List[str]) -> List[dict]:
+        """Try to resolve each conflict by moving a task to a different slot."""
+        changes = []
+        if all("No conflicts" in c for c in conflicts):
+            self._log("AGENT ACT: no action needed.")
+            return changes
+
+        # Build a set of (pet_name, task_name) pairs mentioned in conflict warnings
+        conflicted_pairs = set()
+        _overlap_re = re.compile(
+            r"Conflict: '(.+?)' \((.+?)\) and '(.+?)' \((.+?)\) overlap"
+        )
+        for msg in conflicts:
+            m = _overlap_re.search(msg)
+            if m:
+                task_a, pet_a, task_b, pet_b = m.groups()
+                conflicted_pairs.add((pet_a, task_a))
+                conflicted_pairs.add((pet_b, task_b))
+
+        # For slot-overload conflicts, collect all tasks in the overloaded slot
+        overloaded_slots = set()
+        for msg in conflicts:
+            if "slot is overloaded" in msg:
+                for slot in TimeSlot:
+                    if slot.name.capitalize() in msg:
+                        overloaded_slots.add(slot)
+
+        for pet in self.owner.pets:
+            for task in pet.get_pending_tasks():
+                # Stop early if the schedule is already clean
+                if self._check():
+                    self._log("AGENT ACT: schedule is conflict-free — no further moves needed.")
+                    return changes
+
+                in_conflict = (pet.name, task.name) in conflicted_pairs or task.time_slot in overloaded_slots
+                if not in_conflict:
+                    continue
+
+                original_slot = task.time_slot
+                resolved = False
+                for candidate in self.SLOT_ORDER:
+                    if candidate == original_slot:
+                        continue
+                    # Tentatively move the task
+                    task.time_slot = candidate
+                    self._log(
+                        f"AGENT ACT: trying '{task.name}' ({pet.name}) "
+                        f"{original_slot.name} → {candidate.name}."
+                    )
+                    # Phase 3: Check
+                    if self._check():
+                        changes.append({
+                            "pet": pet.name,
+                            "task": task.name,
+                            "from": original_slot.name.capitalize(),
+                            "to": candidate.name.capitalize(),
+                        })
+                        self._log(
+                            f"AGENT CHECK: conflict resolved — keeping "
+                            f"'{task.name}' in {candidate.name}."
+                        )
+                        resolved = True
+                        break
+                    else:
+                        self._log(
+                            f"AGENT CHECK: still conflicted after move — reverting."
+                        )
+                        task.time_slot = original_slot  # revert if still broken
+
+                if not resolved:
+                    self._log(
+                        f"AGENT ACT: could not resolve conflict for '{task.name}' ({pet.name}) — no free slot found."
+                    )
+        return changes
+
+    # ── Phase 3: Check ───────────────────────────────────────────────────────
+    def _check(self) -> bool:
+        """Return True if the current schedule has no conflicts."""
+        scheduler = Scheduler(owner=self.owner)
+        results = scheduler.safe_detect_conflicts()
+        return all("No conflicts" in r for r in results)
+
+    # ── Confidence score ─────────────────────────────────────────────────────
+    def confidence_score(self, result: dict) -> float:
+        """Return a 0.0–1.0 score reflecting how well the agent performed.
+
+        Scoring:
+        - Resolved all conflicts → 0.7 base
+        - No conflicts found at all → full 1.0 immediately
+        - Each change made deducts 0.1 (fewer moves = higher confidence)
+        - Floor is 0.1 so there is always a non-zero score
+        """
+        conflicts = result.get("conflicts_found", [])
+        no_conflicts_at_start = all("No conflicts" in c for c in conflicts)
+        if no_conflicts_at_start:
+            return 1.0
+
+        if not result.get("resolved", False):
+            score = 0.1
+        else:
+            moves = len(result.get("changes", []))
+            penalty = max(0, moves - 1) * 0.1  # first move is expected; penalize extras
+            score = max(1.0 - penalty, 0.1)
+
+        score = round(min(score, 1.0), 2)
+        logging.info(f"AGENT CONFIDENCE: {score}")
+        return score
+
+    # ── Full run ─────────────────────────────────────────────────────────────
+    def run(self) -> dict:
+        """Execute the full plan → act → check loop and return a summary."""
+        logging.info("AGENT START: beginning agentic scheduling loop.")
+        conflicts = self.plan()
+        changes = self.act(conflicts)
+        clean = self._check()
+        logging.info(
+            f"AGENT END: {'schedule is clean' if clean else 'some conflicts remain'}. "
+            f"{len(changes)} change(s) made."
+        )
+        return {
+            "conflicts_found": conflicts,
+            "changes": changes,
+            "resolved": clean,
+            "log": list(self.log),
+        }

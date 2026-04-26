@@ -1,97 +1,181 @@
-# PawPal+ (Module 2 Project)
+# PawPal+
 
-You are building **PawPal+**, a Streamlit app that helps a pet owner plan care tasks for their pet.
+**A smart daily care planner for busy pet owners including  an AI agent that detects and resolves scheduling conflicts automatically.**
 
-## Scenario
+---
 
-A busy pet owner needs help staying consistent with pet care. They want an assistant that can:
+## Original Project (Modules 1–3)
 
-- Track pet care tasks (walks, feeding, meds, enrichment, grooming, etc.)
-- Consider constraints (time available, priority, owner preferences)
-- Produce a daily plan and explain why it chose that plan
+This project started as **PawPal+**, a Streamlit app designed to help a busy pet owner stay consistent with daily pet care. The original goals were to track care tasks (walks, feeding, medication, grooming, enrichment), apply scheduling constraints like time budget and priority, and produce a daily plan and explain why it chose that plan. The core system included four classes `Owner`, `Pet`, `Task`, and `Scheduler` and covered sorting by time slot, species-specific filtering, conflict detection, and recurring task rescheduling.
 
-Your job is to design the system first (UML), then implement the logic in Python, then connect it to the Streamlit UI.
+---
 
-## What you will build
+## Title and Summary
 
-Your final app should:
+**PawPal+** is a multi-pet daily care scheduler that turns a list of tasks into a smart, conflict-free daily plan. It matters because real households often have more than one pet with overlapping care needs, and manually juggling those schedules across time slots is error-prone. PawPal+ automates that work: it detects when two pets are scheduled at the same time, resolves the conflict by moving one task to an open slot, scores its own confidence in the result, and runs 19 automated reliability tests without any external API or internet connection.
 
-- Let a user enter basic owner + pet info
-- Let a user add/edit tasks (duration + priority at minimum)
-- Generate a daily schedule/plan based on constraints and priorities
-- Display the plan clearly (and ideally explain the reasoning)
-- Include tests for the most important scheduling behaviors
+---
 
-## Getting started
+## Architecture Overview
 
-### Setup
+The system has four main components that data flows through in order:
+
+1. **Human input** — the owner enters pet profiles and care tasks via the Streamlit UI
+2. **Scheduler** — generates a prioritized plan (HIGH before LOW, DAILY before AS_NEEDED) and runs conflict detection to flag when two pets share the same time slot
+3. **ScheduleAgent** — an agentic plan → act → check loop that reads the conflicts, moves one task to an open slot, and re-checks until the schedule is clean; it stops as soon as it resolves the problem
+4. **Human review** — the owner sees the resolved schedule, a confidence score (0.0–1.0), and a reliability report from 19 automated unit tests
+
+The Unit Test Suite sits alongside the agent and runs automatically whenever the AI recommendation is triggered, giving the human a pass/fail signal they can use to trust the output.
+
+**Interactive diagram:** [View on mermaid.live](https://mermaid.live/edit#pako:eNptkk9PGzEQxb_KyAdODQpqVbU5IIUsEP4GAT11e3DtWWLhtSN7nCgQvjuzXnBS6B5W8s5vnvc9vWehvEYxAtFYv1JzGQjuq9oBP-PftaiT_vFV81t9_wbT1Eo3gtnKYYA9uEGCO6S0qMUfGAwO4YgXuo97cC_jI1SSJI96saNMTJi4U3PUyWIos0meVd12MD4YMk-o4cZK9wE5ZmTiXWONIqiQUJHxW-i4gzY1W-qRCI1PTtdiAyc7F48f0FFZOsnKpzxf2M6d0Tw1zRqKSkFPMzplVCoaQeuXCMROI5AHhyuI1u_g04yfMc4Xq8cRBByE5Iow6E8Ozt4cRDLWFtC4h87D9F9GWewC2sA533CL0dslp_ZuskhW-S8udvxDZSJ7XRfkvEd287h8S7pLQyGr-oAw3B8ODvaHZe8io1f_rQnc4tLgKsIs0SJt477sd_rDNa_-coYrh5G7lAwhHPwE4lN8L9Usu7NG_jXW0Jp1Fz5s9Wa9nvgCosXQSqO5zM-C5tjmWmtsZLIkXl5eATf-5Ks)
+
+---
+
+## Setup Instructions
+
+**1. Clone or download the project**
+
+```bash
+cd ai110-module2show-pawpal-starter
+```
+
+**2. Create and activate a virtual environment**
 
 ```bash
 python -m venv .venv
-source .venv/bin/activate  # Windows: .venv\Scripts\activate
+
+# Mac / Linux
+source .venv/bin/activate
+
+# Windows
+.venv\Scripts\activate
+```
+
+**3. Install dependencies**
+
+```bash
 pip install -r requirements.txt
 ```
 
-### Suggested workflow
-
-1. Read the scenario carefully and identify requirements and edge cases.
-2. Draft a UML diagram (classes, attributes, methods, relationships).
-3. Convert UML into Python class stubs (no logic yet).
-4. Implement scheduling logic in small increments.
-5. Add tests to verify key behaviors.
-6. Connect your logic to the Streamlit UI in `app.py`.
-7. Refine UML so it matches what you actually built.
-
----
-
-## Testing PawPal+
-
-### How to Run Tests
-
-From the root `PawPal` directory, run:
+**4. Run the Streamlit app**
 
 ```bash
-python -m pytest tests/
+streamlit run app.py or 
+python -m streamlit run app.py
 ```
 
-To run with detailed output:
+**5. (Optional) Run tests directly from the terminal**
 
 ```bash
-python -m pytest tests/ -v
+python -m pytest tests.py -v
 ```
 
 ---
 
-### What the Tests Cover
+## Sample Interactions
 
-**Task Completion**
-- Verifies that `mark_complete()` correctly flips `is_completed` to `True`
-- Verifies that adding a task to a `Pet` increases its task count
+### Example 1 — Cross-pet conflict detected and resolved
 
-**Sorting Correctness**
-- Verifies tasks added out of order are returned in chronological order (MORNING → AFTERNOON → EVENING)
-- Verifies no tasks are lost when multiple tasks share the same time slot
+**Input:**
+- Owner: Jordan, 120 minutes available
+- Pet 1: Buddy (dog) — Morning Walk, 30 min, HIGH priority, Morning slot
+- Pet 2: Whiskers (cat) — Feeding, 10 min, HIGH priority, Morning slot
+- Click **Generate Schedule**, then **Get AI Recommendation**
 
-**Recurrence Logic**
-- Verifies a `DAILY` task returns a new task due tomorrow when completed
-- Verifies a `WEEKLY` task returns a new task due in 7 days when completed
-- Verifies an `AS_NEEDED` task returns `None` no new task created
-- Verifies `complete_and_reschedule()` adds the next occurrence directly to the pet's task list
-
-**Conflict Detection**
-- Verifies no conflict is reported when tasks are spread across different time slots
-- Verifies a conflict warning is raised when two pets have tasks in the same slot
-- Verifies `safe_detect_conflicts()` returns a clean confirmation message when no issues exist
+**AI Output (agent reasoning log):**
+```
+AGENT PLAN: Detected 2 conflict(s).
+AGENT PLAN: Conflict: 'Morning Walk' (Buddy) and 'Feeding' (Whiskers) overlap in Morning slot.
+AGENT ACT: Moving 'Feeding' (Whiskers) from Morning → Afternoon.
+AGENT CHECK: Schedule is conflict-free.
+```
+- Changes made: Moved **Feeding** (Whiskers) from Morning → Afternoon
+- Verdict: Agent check passed — schedule is now conflict-free.
+- Confidence score: **1.0** (resolved in one move)
 
 ---
 
-### Confidence Level
+### Example 2 — No conflicts, agent takes no action
 
-★★★★☆ (4 out of 5)
+**Input:**
+- Owner: Jordan, 120 minutes available
+- Pet 1: Buddy (dog) — Morning Walk, 30 min, Morning slot
+- Pet 2: Whiskers (cat) — Medication, 15 min, Evening slot
+- Click **Generate Schedule**, then **Get AI Recommendation**
 
-11 out of 11 tests pass. Core behaviors such as task completion, sorting, recurrence, and conflict detection are all verified. I said 4 stars because edge cases like an empty owner (no pets), zero available minutes, and duplicate task completion are not yet covered by the test suite.
+**AI Output:**
+```
+AGENT PLAN: No conflicts detected. Schedule is clean.
+AGENT CHECK: Schedule is conflict-free.
+```
+- Changes made: None
+- Verdict: Agent check passed — schedule is now conflict-free.
+- Confidence score: **1.0**
 
-### UML Diagram
+---
 
-![UML Diagram](uml_final.png)
+### Example 3 — Budget constraint filters out low-priority tasks
 
+**Input:**
+- Owner: Jordan, 40 minutes available
+- Pet: Buddy (dog) — Morning Walk (30 min, HIGH), Enrichment Play (20 min, LOW), Grooming (10 min, MEDIUM)
+
+**Scheduled output:**
+| Task | Duration | Priority |
+|------|----------|----------|
+| Morning Walk | 30 min | HIGH |
+| Grooming | 10 min | MEDIUM |
+
+Enrichment Play is excluded — it would push the total to 60 min, exceeding the 40-minute budget.
+
+---
+
+## Design Decisions
+
+**Pure Python agentic loop (no API key required)**
+The `ScheduleAgent` implements a plan → act → check loop entirely in Python. This means the app works offline and does not require any external service, API key, or paid subscription a deliberate tradeoff that sacrifices natural language reasoning for full reliability and zero cost.
+
+**Session state persistence in Streamlit**
+Streamlit reruns the entire script on every interaction. Storing `pets`, `schedule_generated`, and `agent_result` in `st.session_state` prevents data from disappearing when buttons are clicked. Without this, clicking "Get AI Recommendation" would erase the schedule it was supposed to analyze.
+
+**Reading conflict messages correctly**
+When the agent finds a conflict, it needs to know which pet and which task to move. The first version couldn't read that information correctly, so it did nothing there was no error, no fix, just silence. The fix was teaching it to read the conflict message in a smarter way so it could actually find and move the right task.
+
+**Early-exit after first resolution**
+The agent stops after the first move that makes the schedule conflict-free. It does not continue reassigning tasks just because more conflicting pairs were in the original list. This keeps the schedule as close to the owner's original intent as possible.
+
+**Confidence scoring**
+The confidence score rewards resolving a conflict in one move (1.0), penalizes each extra move beyond the first (−0.1 per move), and assigns 0.1 if the agent could not resolve the conflict at all. This gives the human an at-a-glance signal of how cleanly the agent performed.
+
+---
+
+## Testing Summary
+
+19 automated unit tests are organized across 7 test classes and run every time the AI agent is used in the app.
+
+| Test Class | What it checks |
+|---|---|
+| `TestSchedulerFitsWithinBudget` | The schedule never goes over the owner's available minutes |
+| `TestPriorityOrdering` | High priority tasks are always scheduled before lower ones |
+| `TestSpeciesFilter` | A task meant for a dog does not get assigned to a cat |
+| `TestTimeSlotSorting` | Tasks are shown in order: Morning, then Afternoon, then Evening |
+| `TestConflictDetection` | Two pets in the same time slot gets flagged as a conflict |
+| `TestMarkCompleteAndReschedule` | Daily tasks get rescheduled after completion and one-time tasks do not |
+| `TestFilterTasks` | You can filter tasks by pet name or by whether they are done or not |
+| `TestScheduleAgent` | The agent finds conflicts, fixes them in one move, and scores itself correctly |
+
+**What worked:** All 19 tests pass. The agent reliably detects and resolves single conflicts in one move and correctly takes no action when the schedule is already clean.
+
+**What didn't at first:** Three tests failed because the agent couldn't read the conflict messages correctly. It looked like everything was working, but the agent was quietly doing nothing it had no error, no fix. Once the way it read those messages was corrected, all three tests passed.
+
+**What I learned:** Silent exception handling is one of the hardest bugs to catch. The agentig bappeared to run without errors, but it was doing nothing. Writing tests that assert on specific outputs like the number of changes made forced the issue to surface rather than hiding behind a clean-looking UI.
+
+---
+
+## Reflection
+
+Building the agent taught me that you do not need a fancy AI model to make something feel intelligent. A simple plan, act, check loop was enough to detect and fix scheduling conflicts on its own. The trickiest part was getting it to stop at the right time.The first version kept moving tasks even after the problem was already fixed, so I had to make it re-check the schedule after every move instead of just working through the original list.
+
+Testing also taught me that something can look fine on the screen and still be broken underneath. The only way to really know if the code works is to write tests that check the actual results. Watching the test count go from 16/19 to 19/19 after finding and fixing the bug made that very clear.
+
+This project also showed me that good AI design is not just about what the machine does but it is about knowing what the human should still be in charge of. The agent does the repetitive work, but the owner still looks over the results before trusting them. That balance is something I would keep in mind for any future project.
