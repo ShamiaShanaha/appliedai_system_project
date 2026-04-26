@@ -97,6 +97,11 @@ Moved **Morning Walk** (Buddy) from Morning → Afternoon
 - Verdict: Agent check passed — schedule is now conflict-free.
 - Confidence score: **1.0** (resolved in one move)
 
+![Example1](assets/Example1.png)
+![Example1](assets/Example1__2.png)
+![Example1](assets/Example1__3.png)
+![Example1](assets/Example1__4.png)
+
 ---
 
 ### Example 2 — No conflicts, agent takes no action
@@ -117,6 +122,13 @@ AGENT ACT: no action needed.
 - Verdict: Agent check passed — schedule is now conflict-free.
 - Confidence score: **1.0**
 
+![Example2](assets/Example2.png)
+![Example2](assets/Example2__1.png)
+![Example2](assets/Example2__2.png)
+![Example2](assets/Example2__3.png)
+![Example2](assets/Example2__4.png)
+
+
 ---
 
 ### Example 3 — Budget constraint filters out low-priority tasks
@@ -132,6 +144,10 @@ AGENT ACT: no action needed.
 | Buddy | Grooming | Evening | 10 | MEDIUM |
 
 Enrichment Play is excluded — it would push the total to 60 min, exceeding the 40-minute budget.
+
+![Example2](assets/Example3.png)
+![Example2](assets/Example3__1.png)
+![Example2](assets/Example3__2.png)
 
 ---
 
