@@ -27,6 +27,8 @@ The system has four main components that data flows through in order:
 
 The Unit Test Suite sits alongside the agent and runs automatically whenever the AI recommendation is triggered, giving the human a pass/fail signal they can use to trust the output.
 
+![UML Diagram](assets/UMLDiagram.png)
+
 **Interactive diagram:** [View on mermaid.live](https://mermaid.live/edit#pako:eNptkk9PGzEQxb_KyAdODQpqVbU5IIUsEP4GAT11e3DtWWLhtSN7nCgQvjuzXnBS6B5W8s5vnvc9vWehvEYxAtFYv1JzGQjuq9oBP-PftaiT_vFV81t9_wbT1Eo3gtnKYYA9uEGCO6S0qMUfGAwO4YgXuo97cC_jI1SSJI96saNMTJi4U3PUyWIos0meVd12MD4YMk-o4cZK9wE5ZmTiXWONIqiQUJHxW-i4gzY1W-qRCI1PTtdiAyc7F48f0FFZOsnKpzxf2M6d0Tw1zRqKSkFPMzplVCoaQeuXCMROI5AHhyuI1u_g04yfMc4Xq8cRBByE5Iow6E8Ozt4cRDLWFtC4h87D9F9GWewC2sA533CL0dslp_ZuskhW-S8udvxDZSJ7XRfkvEd287h8S7pLQyGr-oAw3B8ODvaHZe8io1f_rQnc4tLgKsIs0SJt477sd_rDNa_-coYrh5G7lAwhHPwE4lN8L9Usu7NG_jXW0Jp1Fz5s9Wa9nvgCosXQSqO5zM-C5tjmWmtsZLIkXl5eATf-5Ks)
 
 ---
