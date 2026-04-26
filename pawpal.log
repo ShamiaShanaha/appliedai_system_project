@@ -222,3 +222,90 @@
 2026-04-25 23:48:09,496 [INFO] AGENT END: schedule is clean. 1 change(s) made.
 2026-04-25 23:48:09,497 [INFO] TEST SUMMARY: 19 out of 19 tests passed. All checks green.
 2026-04-25 23:48:09,499 [INFO] Reliability report shown: 19 out of 19 tests passed. All checks green.
+2026-04-26 14:36:54,804 [INFO] User triggered ScheduleAgent.
+2026-04-26 14:36:54,808 [INFO] AGENT START: beginning agentic scheduling loop.
+2026-04-26 14:36:54,809 [INFO] AGENT PLAN: analysing current schedule for conflicts.
+2026-04-26 14:36:54,810 [INFO] AGENT PLAN: detected — Conflict: 'Feeding' (Whiskers) and 'Morning Walk' (Buddy) overlap in the Morning slot.
+2026-04-26 14:36:54,811 [INFO] AGENT ACT: trying 'Morning Walk' (Buddy) MORNING \u2192 AFTERNOON.
+2026-04-26 14:36:54,812 [INFO] AGENT CHECK: conflict resolved — keeping 'Morning Walk' in AFTERNOON.
+2026-04-26 14:36:54,813 [INFO] AGENT ACT: schedule is conflict-free — no further moves needed.
+2026-04-26 14:36:54,813 [INFO] AGENT END: schedule is clean. 1 change(s) made.
+2026-04-26 14:36:54,814 [INFO] AGENT CONFIDENCE: 1.0
+2026-04-26 14:36:54,834 [INFO] AGENT START: beginning agentic scheduling loop.
+2026-04-26 14:36:54,835 [INFO] AGENT PLAN: analysing current schedule for conflicts.
+2026-04-26 14:36:54,836 [INFO] AGENT PLAN: no conflicts found — nothing to fix.
+2026-04-26 14:36:54,836 [INFO] AGENT ACT: no action needed.
+2026-04-26 14:36:54,837 [INFO] AGENT END: schedule is clean. 0 change(s) made.
+2026-04-26 14:36:54,837 [INFO] AGENT START: beginning agentic scheduling loop.
+2026-04-26 14:36:54,838 [INFO] AGENT PLAN: analysing current schedule for conflicts.
+2026-04-26 14:36:54,838 [INFO] AGENT PLAN: detected — Conflict: 'DogMorning' (Buddy) and 'CatMorning' (Whiskers) overlap in the Morning slot.
+2026-04-26 14:36:54,839 [INFO] AGENT ACT: trying 'DogMorning' (Buddy) MORNING \u2192 AFTERNOON.
+2026-04-26 14:36:54,840 [INFO] AGENT CHECK: conflict resolved — keeping 'DogMorning' in AFTERNOON.
+2026-04-26 14:36:54,840 [INFO] AGENT ACT: schedule is conflict-free — no further moves needed.
+2026-04-26 14:36:54,841 [INFO] AGENT END: schedule is clean. 1 change(s) made.
+2026-04-26 14:36:54,841 [INFO] AGENT CONFIDENCE: 1.0
+2026-04-26 14:36:54,843 [INFO] AGENT PLAN: analysing current schedule for conflicts.
+2026-04-26 14:36:54,843 [INFO] AGENT PLAN: detected — Conflict: 'DogMorning' (Buddy) and 'CatMorning' (Whiskers) overlap in the Morning slot.
+2026-04-26 14:36:54,844 [INFO] AGENT START: beginning agentic scheduling loop.
+2026-04-26 14:36:54,844 [INFO] AGENT PLAN: analysing current schedule for conflicts.
+2026-04-26 14:36:54,844 [INFO] AGENT PLAN: detected — Conflict: 'DogMorning' (Buddy) and 'CatMorning' (Whiskers) overlap in the Morning slot.
+2026-04-26 14:36:54,845 [INFO] AGENT ACT: trying 'DogMorning' (Buddy) MORNING \u2192 AFTERNOON.
+2026-04-26 14:36:54,846 [INFO] AGENT CHECK: conflict resolved — keeping 'DogMorning' in AFTERNOON.
+2026-04-26 14:36:54,847 [INFO] AGENT ACT: schedule is conflict-free — no further moves needed.
+2026-04-26 14:36:54,847 [INFO] AGENT END: schedule is clean. 1 change(s) made.
+2026-04-26 14:36:54,848 [INFO] AGENT START: beginning agentic scheduling loop.
+2026-04-26 14:36:54,849 [INFO] AGENT PLAN: analysing current schedule for conflicts.
+2026-04-26 14:36:54,849 [INFO] AGENT PLAN: no conflicts found — nothing to fix.
+2026-04-26 14:36:54,850 [INFO] AGENT ACT: no action needed.
+2026-04-26 14:36:54,850 [INFO] AGENT END: schedule is clean. 0 change(s) made.
+2026-04-26 14:36:54,851 [INFO] AGENT START: beginning agentic scheduling loop.
+2026-04-26 14:36:54,852 [INFO] AGENT PLAN: analysing current schedule for conflicts.
+2026-04-26 14:36:54,852 [INFO] AGENT PLAN: detected — Conflict: 'DogMorning' (Buddy) and 'CatMorning' (Whiskers) overlap in the Morning slot.
+2026-04-26 14:36:54,853 [INFO] AGENT ACT: trying 'DogMorning' (Buddy) MORNING \u2192 AFTERNOON.
+2026-04-26 14:36:54,854 [INFO] AGENT CHECK: conflict resolved — keeping 'DogMorning' in AFTERNOON.
+2026-04-26 14:36:54,855 [INFO] AGENT ACT: schedule is conflict-free — no further moves needed.
+2026-04-26 14:36:54,855 [INFO] AGENT END: schedule is clean. 1 change(s) made.
+2026-04-26 14:36:54,858 [INFO] TEST SUMMARY: 19 out of 19 tests passed. All checks green.
+2026-04-26 14:36:54,863 [INFO] Reliability report shown: 19 out of 19 tests passed. All checks green.
+2026-04-26 14:45:53,633 [INFO] User triggered ScheduleAgent.
+2026-04-26 14:45:53,634 [INFO] AGENT START: beginning agentic scheduling loop.
+2026-04-26 14:45:53,635 [INFO] AGENT PLAN: analysing current schedule for conflicts.
+2026-04-26 14:45:53,635 [INFO] AGENT PLAN: no conflicts found — nothing to fix.
+2026-04-26 14:45:53,635 [INFO] AGENT ACT: no action needed.
+2026-04-26 14:45:53,637 [INFO] AGENT END: schedule is clean. 0 change(s) made.
+2026-04-26 14:45:53,661 [INFO] AGENT START: beginning agentic scheduling loop.
+2026-04-26 14:45:53,662 [INFO] AGENT PLAN: analysing current schedule for conflicts.
+2026-04-26 14:45:53,663 [INFO] AGENT PLAN: no conflicts found — nothing to fix.
+2026-04-26 14:45:53,663 [INFO] AGENT ACT: no action needed.
+2026-04-26 14:45:53,665 [INFO] AGENT END: schedule is clean. 0 change(s) made.
+2026-04-26 14:45:53,667 [INFO] AGENT START: beginning agentic scheduling loop.
+2026-04-26 14:45:53,667 [INFO] AGENT PLAN: analysing current schedule for conflicts.
+2026-04-26 14:45:53,668 [INFO] AGENT PLAN: detected — Conflict: 'DogMorning' (Buddy) and 'CatMorning' (Whiskers) overlap in the Morning slot.
+2026-04-26 14:45:53,669 [INFO] AGENT ACT: trying 'DogMorning' (Buddy) MORNING \u2192 AFTERNOON.
+2026-04-26 14:45:53,670 [INFO] AGENT CHECK: conflict resolved — keeping 'DogMorning' in AFTERNOON.
+2026-04-26 14:45:53,671 [INFO] AGENT ACT: schedule is conflict-free — no further moves needed.
+2026-04-26 14:45:53,671 [INFO] AGENT END: schedule is clean. 1 change(s) made.
+2026-04-26 14:45:53,672 [INFO] AGENT CONFIDENCE: 1.0
+2026-04-26 14:45:53,672 [INFO] AGENT PLAN: analysing current schedule for conflicts.
+2026-04-26 14:45:53,673 [INFO] AGENT PLAN: detected — Conflict: 'DogMorning' (Buddy) and 'CatMorning' (Whiskers) overlap in the Morning slot.
+2026-04-26 14:45:53,674 [INFO] AGENT START: beginning agentic scheduling loop.
+2026-04-26 14:45:53,675 [INFO] AGENT PLAN: analysing current schedule for conflicts.
+2026-04-26 14:45:53,676 [INFO] AGENT PLAN: detected — Conflict: 'DogMorning' (Buddy) and 'CatMorning' (Whiskers) overlap in the Morning slot.
+2026-04-26 14:45:53,676 [INFO] AGENT ACT: trying 'DogMorning' (Buddy) MORNING \u2192 AFTERNOON.
+2026-04-26 14:45:53,678 [INFO] AGENT CHECK: conflict resolved — keeping 'DogMorning' in AFTERNOON.
+2026-04-26 14:45:53,679 [INFO] AGENT ACT: schedule is conflict-free — no further moves needed.
+2026-04-26 14:45:53,679 [INFO] AGENT END: schedule is clean. 1 change(s) made.
+2026-04-26 14:45:53,680 [INFO] AGENT START: beginning agentic scheduling loop.
+2026-04-26 14:45:53,681 [INFO] AGENT PLAN: analysing current schedule for conflicts.
+2026-04-26 14:45:53,682 [INFO] AGENT PLAN: no conflicts found — nothing to fix.
+2026-04-26 14:45:53,683 [INFO] AGENT ACT: no action needed.
+2026-04-26 14:45:53,683 [INFO] AGENT END: schedule is clean. 0 change(s) made.
+2026-04-26 14:45:53,685 [INFO] AGENT START: beginning agentic scheduling loop.
+2026-04-26 14:45:53,685 [INFO] AGENT PLAN: analysing current schedule for conflicts.
+2026-04-26 14:45:53,686 [INFO] AGENT PLAN: detected — Conflict: 'DogMorning' (Buddy) and 'CatMorning' (Whiskers) overlap in the Morning slot.
+2026-04-26 14:45:53,686 [INFO] AGENT ACT: trying 'DogMorning' (Buddy) MORNING \u2192 AFTERNOON.
+2026-04-26 14:45:53,687 [INFO] AGENT CHECK: conflict resolved — keeping 'DogMorning' in AFTERNOON.
+2026-04-26 14:45:53,688 [INFO] AGENT ACT: schedule is conflict-free — no further moves needed.
+2026-04-26 14:45:53,688 [INFO] AGENT END: schedule is clean. 1 change(s) made.
+2026-04-26 14:45:53,690 [INFO] TEST SUMMARY: 19 out of 19 tests passed. All checks green.
+2026-04-26 14:45:53,693 [INFO] Reliability report shown: 19 out of 19 tests passed. All checks green.

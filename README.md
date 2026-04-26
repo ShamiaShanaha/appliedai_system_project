@@ -84,12 +84,14 @@ python -m pytest tests.py -v
 
 **AI Output (agent reasoning log):**
 ```
-AGENT PLAN: Detected 2 conflict(s).
-AGENT PLAN: Conflict: 'Morning Walk' (Buddy) and 'Feeding' (Whiskers) overlap in Morning slot.
-AGENT ACT: Moving 'Feeding' (Whiskers) from Morning → Afternoon.
-AGENT CHECK: Schedule is conflict-free.
+AGENT PLAN: analysing current schedule for conflicts.
+AGENT PLAN: detected — Conflict: 'Feeding' (Whiskers) and 'Morning Walk' (Buddy) overlap in the Morning slot.
+AGENT ACT: trying 'Morning Walk' (Buddy) MORNING → AFTERNOON.
+AGENT CHECK: conflict resolved — keeping 'Morning Walk' in AFTERNOON.
+AGENT ACT: schedule is conflict-free — no further moves needed.
 ```
-- Changes made: Moved **Feeding** (Whiskers) from Morning → Afternoon
+- Changes made:
+Moved **Morning Walk** (Buddy) from Morning → Afternoon
 - Verdict: Agent check passed — schedule is now conflict-free.
 - Confidence score: **1.0** (resolved in one move)
 
@@ -105,8 +107,9 @@ AGENT CHECK: Schedule is conflict-free.
 
 **AI Output:**
 ```
-AGENT PLAN: No conflicts detected. Schedule is clean.
-AGENT CHECK: Schedule is conflict-free.
+AGENT PLAN: analysing current schedule for conflicts.
+AGENT PLAN: no conflicts found — nothing to fix.
+AGENT ACT: no action needed.
 ```
 - Changes made: None
 - Verdict: Agent check passed — schedule is now conflict-free.
@@ -118,13 +121,13 @@ AGENT CHECK: Schedule is conflict-free.
 
 **Input:**
 - Owner: Jordan, 40 minutes available
-- Pet: Buddy (dog) — Morning Walk (30 min, HIGH), Enrichment Play (20 min, LOW), Grooming (10 min, MEDIUM)
+- Pet: Buddy (dog) — Morning Walk (30 min, Morning, HIGH), Enrichment Play (20 min,Afternoon, LOW), Grooming (10 min,Evening, MEDIUM)
 
 **Scheduled output:**
-| Task | Duration | Priority |
-|------|----------|----------|
-| Morning Walk | 30 min | HIGH |
-| Grooming | 10 min | MEDIUM |
+| Pet | Task | Time of Day | Duration (min) | Priority |
+|-----|------|-------------|----------------|----------|
+| Buddy | Morning Walk | Morning | 30 | HIGH |
+| Buddy | Grooming | Evening | 10 | MEDIUM |
 
 Enrichment Play is excluded — it would push the total to 60 min, exceeding the 40-minute budget.
 
