@@ -200,3 +200,8 @@ Building the agent taught me that you do not need a fancy AI model to make somet
 Testing also taught me that something can look fine on the screen and still be broken underneath. The only way to really know if the code works is to write tests that check the actual results. Watching the test count go from 16/19 to 19/19 after finding and fixing the bug made that very clear.
 
 This project also showed me that good AI design is not just about what the machine does but it is about knowing what the human should still be in charge of. The agent does the repetitive work, but the owner still looks over the results before trusting them. That balance is something I would keep in mind for any future project.
+
+
+## Loom Video
+[View on loom]
+(https://www.loom.com/share/7228c36c7ab342e98df0d1e0e404882e) 
