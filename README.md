@@ -203,5 +203,4 @@ This project also showed me that good AI design is not just about what the machi
 
 
 ## Loom Video
-[View on loom]
 https://www.loom.com/share/7228c36c7ab342e98df0d1e0e404882e
